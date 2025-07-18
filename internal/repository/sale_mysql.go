@@ -66,3 +66,21 @@ func (r *SalesMySQL) Save(s *domain.Sale) (err error) {
 
 	return
 }
+
+// Save saves the customer into the database.
+func (r *SalesMySQL) SaveJson(c []*domain.Sale) (total int, err error) {
+
+	for _, s := range c {
+		total++
+		_, err = r.db.Exec(
+			"INSERT INTO sales (`quantity`, `product_id`, `invoice_id`) VALUES (?, ?, ?)",
+			(*s).Quantity, (*s).ProductId, (*s).InvoiceId,
+		)
+
+		if err != nil {
+			return
+		}
+
+	}
+	return
+}

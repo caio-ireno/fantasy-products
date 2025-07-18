@@ -24,3 +24,9 @@ func (s *ProductsDefault) Save(p *domain.Product) (err error) {
 	err = s.rp.Save(p)
 	return
 }
+
+// Save saves the customer.
+func (s *ProductsDefault) SaveJson(c []*domain.Product) (total int, err error) {
+	total, err = s.rp.SaveJson(c)
+	return
+}

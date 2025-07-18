@@ -108,6 +108,7 @@ func (a *ApplicationDefault) SetUp() (err error) {
 		r.Get("/", hdProduct.GetAll())
 		// - POST /products
 		r.Post("/", hdProduct.Create())
+		r.Post("/json", hdProduct.CreateWithJson())
 	})
 	a.router.Route("/invoices", func(r chi.Router) {
 		// - GET /invoices
@@ -122,6 +123,7 @@ func (a *ApplicationDefault) SetUp() (err error) {
 		r.Get("/", hdSale.GetAll())
 		// - POST /sales
 		r.Post("/", hdSale.Create())
+		r.Post("/json", hdSale.CreateWithJson())
 	})
 
 	return

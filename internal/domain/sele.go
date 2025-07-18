@@ -24,6 +24,7 @@ type ServiceSale interface {
 	FindAll() (s []Sale, err error)
 	// Save saves a sale.
 	Save(s *Sale) (err error)
+	SaveJson(c []*Sale) (total int, err error)
 }
 
 // RepositorySale is the interface that wraps the basic Sale methods.
@@ -32,4 +33,5 @@ type RepositorySale interface {
 	FindAll() (s []Sale, err error)
 	// Save saves a sale.
 	Save(s *Sale) (err error)
+	SaveJson(c []*Sale) (total int, err error)
 }

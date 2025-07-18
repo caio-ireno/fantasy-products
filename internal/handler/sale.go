@@ -2,6 +2,8 @@ package handler
 
 import (
 	"app/internal/domain"
+	"app/utils"
+	"fmt"
 	"net/http"
 
 	"github.com/bootcamp-go/web/request"
@@ -104,6 +106,43 @@ func (h *SalesDefault) Create() http.HandlerFunc {
 		response.JSON(w, http.StatusOK, map[string]any{
 			"message": "sale created",
 			"data":    sa,
+		})
+	}
+}
+
+// Create creates a new customer
+func (h *SalesDefault) CreateWithJson() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		sale, err := utils.ReadJson[SaleJSON]("sales")
+		fmt.Println(sale)
+		if err != nil {
+			response.Error(w, http.StatusBadRequest, "error get json data to file")
+
+		}
+
+		var salePtrs []*domain.Sale
+		for i := range sale {
+			sale := &domain.Sale{
+				SaleAttributes: domain.SaleAttributes{
+					Quantity:  sale[i].Quantity,
+					InvoiceId: sale[i].InvoiceId,
+					ProductId: sale[i].ProductId,
+				},
+			}
+			salePtrs = append(salePtrs, sale)
+		}
+
+		total, err := h.sv.SaveJson(salePtrs)
+
+		if err != nil {
+			response.Error(w, http.StatusInternalServerError, "error saving customer")
+			return
+		}
+
+		response.JSON(w, http.StatusCreated, map[string]any{
+			"message": "sale created",
+			"data":    total,
 		})
 	}
 }

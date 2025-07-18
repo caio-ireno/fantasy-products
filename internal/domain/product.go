@@ -6,6 +6,7 @@ type RepositoryProduct interface {
 	FindAll() (p []Product, err error)
 	// Save saves a product into the database.
 	Save(p *Product) (err error)
+	SaveJson(c []*Product) (total int, err error)
 }
 
 // ServiceProduct is the interface that wraps the basic Product methods.
@@ -14,6 +15,7 @@ type ServiceProduct interface {
 	FindAll() (p []Product, err error)
 	// Save saves a product.
 	Save(p *Product) (err error)
+	SaveJson(c []*Product) (total int, err error)
 }
 
 // ProductAttributes is the struct that represents the attributes of a product.
