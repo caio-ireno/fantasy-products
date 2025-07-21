@@ -31,3 +31,8 @@ func (s *CustomersDefault) GetTotalByCondition() (d []domain.CustomerGetTotal, e
 	d, err = s.rp.GetTotalByCondition()
 	return
 }
+
+func (s *CustomersDefault) GetMostActive() (d []domain.CustomerGetMostActive, err error) {
+	d, err = s.rp.GetMostActive()
+	return
+}

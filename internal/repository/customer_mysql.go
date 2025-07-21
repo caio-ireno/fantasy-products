@@ -113,3 +113,30 @@ GROUP BY c.condition;`)
 	return
 
 }
+
+func (r *CustomersMySQL) GetMostActive() (ma []domain.CustomerGetMostActive, err error) {
+
+	rows, err := r.db.Query(`select c.first_name, c.last_name, round(sum( i.total),2) as total
+from invoices i
+join customers c on i.customer_id=c.id
+group by customer_id
+order by total desc
+limit 5;`)
+
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var totalCustomer domain.CustomerGetMostActive
+		err = rows.Scan(&totalCustomer.FirstName, &totalCustomer.LastName, &totalCustomer.Amount)
+		if err != nil {
+			return
+		}
+		ma = append(ma, totalCustomer)
+	}
+	err = rows.Err()
+	return
+
+}

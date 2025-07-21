@@ -166,3 +166,20 @@ func (h *CustomersDefault) GetTotalByCondition() http.HandlerFunc {
 		})
 	}
 }
+
+func (h *CustomersDefault) GetMostActive() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		ma, err := h.sv.GetMostActive()
+
+		if err != nil {
+			response.Error(w, http.StatusInternalServerError, "error saving customer")
+			return
+		}
+
+		response.JSON(w, http.StatusCreated, map[string]any{
+			"message": "Most active customer spent more money",
+			"data":    ma,
+		})
+	}
+}

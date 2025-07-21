@@ -8,6 +8,8 @@ type RepositoryCustomer interface {
 	Save(c *Customer) (err error)
 	SaveJson(c []*Customer) (total int, err error)
 	GetTotalByCondition() (d []CustomerGetTotal, err error)
+
+	GetMostActive() (ma []CustomerGetMostActive, err error)
 }
 
 // ServiceCustomer is the interface that wraps the basic methods that a customer service should implement.
@@ -18,6 +20,7 @@ type ServiceCustomer interface {
 	Save(c *Customer) (err error)
 	SaveJson(c []*Customer) (total int, err error)
 	GetTotalByCondition() (d []CustomerGetTotal, err error)
+	GetMostActive() (ma []CustomerGetMostActive, err error)
 }
 
 // CustomerAttributes is the struct that represents the attributes of a customer.
@@ -41,4 +44,10 @@ type Customer struct {
 type CustomerGetTotal struct {
 	Condition string
 	Total     float64
+}
+
+type CustomerGetMostActive struct {
+	FirstName string
+	LastName  string
+	Amount    float64
 }
