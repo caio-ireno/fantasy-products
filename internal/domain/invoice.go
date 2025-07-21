@@ -18,6 +18,11 @@ type Invoice struct {
 	InvoiceAttributes
 }
 
+type InvoiceTotalToUpdate struct {
+	Total     float64
+	InvoiceId int
+}
+
 // ServiceInvoice is the interface that wraps the basic methods that an invoice service should implement.
 type ServiceInvoice interface {
 	// FindAll returns all invoices
@@ -25,6 +30,8 @@ type ServiceInvoice interface {
 	// Save saves an invoice
 	Save(i *Invoice) (err error)
 	SaveJson(c []*Invoice) (total int, err error)
+
+	UpdateTotal() (err error)
 }
 
 // RepositoryInvoice is the interface that wraps the basic methods that an invoice repository should implement.
@@ -35,4 +42,6 @@ type RepositoryInvoice interface {
 	Save(i *Invoice) (err error)
 	// Save saves an invoice
 	SaveJson(c []*Invoice) (total int, err error)
+	GetTotalByInvoicesIdAndCustomerId() (t []InvoiceTotalToUpdate, err error)
+	UpdateTotal(t []InvoiceTotalToUpdate) (err error)
 }

@@ -82,3 +82,43 @@ func (r *InvoicesMySQL) SaveJson(c []*domain.Invoice) (total int, err error) {
 	}
 	return
 }
+
+func (r *InvoicesMySQL) GetTotalByInvoicesIdAndCustomerId() (t []domain.InvoiceTotalToUpdate, err error) {
+
+	rows, err := r.db.Query(`select SUM(s.quantity) as total, s.invoice_id
+		from 
+		sales s 
+		join invoices i on s.invoice_id=i.id
+		join customers c on c.id =i.customer_id
+		join products p on s.product_id= p.id
+		GROUP BY s.invoice_id`,
+	)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var totalToUpdate domain.InvoiceTotalToUpdate
+		err = rows.Scan(&totalToUpdate.Total, &totalToUpdate.InvoiceId)
+		if err != nil {
+			return
+		}
+		t = append(t, totalToUpdate)
+	}
+	err = rows.Err()
+	return
+}
+
+func (r *InvoicesMySQL) UpdateTotal(data []domain.InvoiceTotalToUpdate) (err error) {
+
+	for _, d := range data {
+		query := "update invoices set total = ROUND(?,2) where id=?"
+		_, err = r.db.Exec(query, d.Total, d.InvoiceId)
+
+		if err != nil {
+			return
+		}
+	}
+	return
+}

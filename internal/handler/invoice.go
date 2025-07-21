@@ -146,3 +146,20 @@ func (h *InvoicesDefault) CreateWithJson() http.HandlerFunc {
 		})
 	}
 }
+
+// Create creates a new customer
+func (h *InvoicesDefault) UpdateTotal() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		err := h.sv.UpdateTotal()
+
+		if err != nil {
+			response.Error(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		response.JSON(w, http.StatusNoContent, map[string]any{
+			"message": "Total of invoices success updated",
+		})
+	}
+}

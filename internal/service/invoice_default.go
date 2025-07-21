@@ -30,3 +30,18 @@ func (s *InvoicesDefault) SaveJson(c []*domain.Invoice) (total int, err error) {
 	total, err = s.rp.SaveJson(c)
 	return
 }
+
+func (s *InvoicesDefault) UpdateTotal() (err error) {
+	data, err := s.rp.GetTotalByInvoicesIdAndCustomerId()
+	if err != nil {
+		return
+	}
+
+	err = s.rp.UpdateTotal(data)
+
+	if err != nil {
+		return
+	}
+
+	return
+}
