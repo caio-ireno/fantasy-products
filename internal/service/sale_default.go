@@ -30,3 +30,8 @@ func (s *SalesDefault) SaveJson(sa []*domain.Sale) (total int, err error) {
 	total, err = s.rp.SaveJson(sa)
 	return
 }
+
+func (s *SalesDefault) GetTopFiveProducts() (total []domain.SaleTopFiveProducts, err error) {
+	total, err = s.rp.GetTopFiveProducts()
+	return
+}

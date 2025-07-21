@@ -146,3 +146,20 @@ func (h *SalesDefault) CreateWithJson() http.HandlerFunc {
 		})
 	}
 }
+
+func (h *SalesDefault) GetTopFiveProducts() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		data, err := h.sv.GetTopFiveProducts()
+
+		if err != nil {
+			response.Error(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		response.JSON(w, http.StatusOK, map[string]any{
+			"message": "Total 5 products",
+			"data":    data,
+		})
+	}
+}

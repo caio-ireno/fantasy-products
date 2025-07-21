@@ -124,9 +124,11 @@ func (a *ApplicationDefault) SetUp() (err error) {
 	a.router.Route("/sales", func(r chi.Router) {
 		// - GET /sales
 		r.Get("/", hdSale.GetAll())
+		r.Get("/topFiveProducts", hdSale.GetTopFiveProducts())
 		// - POST /sales
 		r.Post("/", hdSale.Create())
 		r.Post("/json", hdSale.CreateWithJson())
+
 	})
 
 	return

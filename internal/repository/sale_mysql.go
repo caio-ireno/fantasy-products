@@ -84,3 +84,36 @@ func (r *SalesMySQL) SaveJson(c []*domain.Sale) (total int, err error) {
 	}
 	return
 }
+
+func (r *SalesMySQL) GetTopFiveProducts() (s []domain.SaleTopFiveProducts, err error) {
+
+	rows, err := r.db.Query(`select p.description, sum(s.quantity) as total  from 
+							sales s
+							join products p on p.id=s.product_id
+							group by product_id
+							order by total desc
+							limit 5;`)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var sa domain.SaleTopFiveProducts
+		// scan the row into the sale
+		err := rows.Scan(&sa.Description, &sa.Total)
+		if err != nil {
+			return nil, err
+		}
+		// append the sale to the slice
+		s = append(s, sa)
+	}
+
+	err = rows.Err()
+	if err != nil {
+		return
+	}
+
+	return
+}

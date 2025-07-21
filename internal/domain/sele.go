@@ -18,6 +18,13 @@ type Sale struct {
 	SaleAttributes
 }
 
+type SaleTopFiveProducts struct {
+	// Id is the unique identifier of the sale.
+	Description string
+	// SaleAttributes is the attributes of the sale.
+	Total int
+}
+
 // ServiceSale is the interface that wraps the basic ServiceSale methods.
 type ServiceSale interface {
 	// FindAll returns all sales.
@@ -25,6 +32,7 @@ type ServiceSale interface {
 	// Save saves a sale.
 	Save(s *Sale) (err error)
 	SaveJson(c []*Sale) (total int, err error)
+	GetTopFiveProducts() (total []SaleTopFiveProducts, err error)
 }
 
 // RepositorySale is the interface that wraps the basic Sale methods.
@@ -34,4 +42,5 @@ type RepositorySale interface {
 	// Save saves a sale.
 	Save(s *Sale) (err error)
 	SaveJson(c []*Sale) (total int, err error)
+	GetTopFiveProducts() (total []SaleTopFiveProducts, err error)
 }
