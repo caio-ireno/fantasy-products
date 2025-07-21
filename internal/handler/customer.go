@@ -148,3 +148,21 @@ func (h *CustomersDefault) CreateWithJson() http.HandlerFunc {
 		})
 	}
 }
+
+// Create creates a new customer
+func (h *CustomersDefault) GetTotalByCondition() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		total, err := h.sv.GetTotalByCondition()
+
+		if err != nil {
+			response.Error(w, http.StatusInternalServerError, "error saving customer")
+			return
+		}
+
+		response.JSON(w, http.StatusCreated, map[string]any{
+			"message": "Total  by condition",
+			"data":    total,
+		})
+	}
+}

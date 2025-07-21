@@ -83,3 +83,33 @@ func (r *CustomersMySQL) SaveJson(c []*domain.Customer) (total int, err error) {
 	}
 	return
 }
+
+func (r *CustomersMySQL) GetTotalByCondition() (d []domain.CustomerGetTotal, err error) {
+
+	rows, err := r.db.Query(`SELECT 
+    CASE c.condition
+        WHEN 1 THEN 'Activo ( 1 )'
+        ELSE 'Inactivo ( 0 )'
+    END AS Condition1,
+    ROUND(SUM(i.total), 2) AS Total
+FROM invoices i
+JOIN customers c ON c.id = i.customer_id
+GROUP BY c.condition;`)
+
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var totalCustomer domain.CustomerGetTotal
+		err = rows.Scan(&totalCustomer.Condition, &totalCustomer.Total)
+		if err != nil {
+			return
+		}
+		d = append(d, totalCustomer)
+	}
+	err = rows.Err()
+	return
+
+}

@@ -85,7 +85,7 @@ func (r *InvoicesMySQL) SaveJson(c []*domain.Invoice) (total int, err error) {
 
 func (r *InvoicesMySQL) GetTotalByInvoicesIdAndCustomerId() (t []domain.InvoiceTotalToUpdate, err error) {
 
-	rows, err := r.db.Query(`select SUM(s.quantity) as total, s.invoice_id
+	rows, err := r.db.Query(`select SUM(s.quantity* p.price) as total, s.invoice_id
 		from 
 		sales s 
 		join invoices i on s.invoice_id=i.id

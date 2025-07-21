@@ -30,6 +30,15 @@ FROM
 GROUP BY c.condition;
 ```
 
+Após atualizar o total de Invoices
+
+```sql
+    select sum(total) as total, c.condition 
+    from invoices i join customers c on i.customer_id= c.id
+    group by c.condition;
+
+```
+
 
 # QUERY UPDATE TOTAL 
 
