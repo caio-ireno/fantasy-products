@@ -102,6 +102,7 @@ func (a *ApplicationDefault) SetUp() (err error) {
 		r.Post("/json", hdCustomer.CreateWithJson())
 		// - POST /customers
 		r.Post("/", hdCustomer.Create())
+
 		r.Get("/totalByCondition", hdCustomer.GetTotalByCondition())
 		r.Get("/mostActive", hdCustomer.GetMostActive())
 	})

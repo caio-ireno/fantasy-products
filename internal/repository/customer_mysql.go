@@ -3,6 +3,7 @@ package repository
 import (
 	"app/internal/domain"
 	"database/sql"
+	"fmt"
 )
 
 // NewCustomersMySQL creates new mysql repository for customer entity.
@@ -46,7 +47,6 @@ func (r *CustomersMySQL) FindAll() (c []domain.Customer, err error) {
 
 // Save saves the customer into the database.
 func (r *CustomersMySQL) Save(c *domain.Customer) (err error) {
-	// execute the query
 	res, err := r.db.Exec(
 		"INSERT INTO customers (`first_name`, `last_name`, `condition`) VALUES (?, ?, ?)",
 		(*c).FirstName, (*c).LastName, (*c).Condition,
@@ -55,15 +55,13 @@ func (r *CustomersMySQL) Save(c *domain.Customer) (err error) {
 		return err
 	}
 
-	// get the last inserted id
 	id, err := res.LastInsertId()
 	if err != nil {
 		return err
 	}
 
-	// set the id
 	(*c).Id = int(id)
-
+	fmt.Print((*c).Id)
 	return
 }
 
@@ -84,6 +82,7 @@ func (r *CustomersMySQL) SaveJson(c []*domain.Customer) (total int, err error) {
 	return
 }
 
+// req 1 Valores totais arredondados para 2 casas decimais por condition do customer
 func (r *CustomersMySQL) GetTotalByCondition() (d []domain.CustomerGetTotal, err error) {
 
 	rows, err := r.db.Query(`SELECT 
@@ -114,6 +113,7 @@ GROUP BY c.condition;`)
 
 }
 
+// req 3 Top 5 dos customers ativos quem gastou mais dinheiro
 func (r *CustomersMySQL) GetMostActive() (ma []domain.CustomerGetMostActive, err error) {
 
 	rows, err := r.db.Query(`select c.first_name, c.last_name, round(sum( i.total),2) as total

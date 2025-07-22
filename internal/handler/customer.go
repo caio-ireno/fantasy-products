@@ -40,10 +40,7 @@ type RequestBodyCustomer struct {
 // GetAll returns all customers
 func (h *CustomersDefault) GetAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// request
-		// ...
 
-		// process
 		c, err := h.sv.FindAll()
 		if err != nil {
 			log.Println(err)
@@ -72,8 +69,7 @@ func (h *CustomersDefault) GetAll() http.HandlerFunc {
 // Create creates a new customer
 func (h *CustomersDefault) Create() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// request
-		// - body
+
 		var reqBody RequestBodyCustomer
 		err := request.JSON(r, &reqBody)
 		if err != nil {
@@ -81,8 +77,6 @@ func (h *CustomersDefault) Create() http.HandlerFunc {
 			return
 		}
 
-		// process
-		// - deserialize
 		c := domain.Customer{
 			CustomerAttributes: domain.CustomerAttributes{
 				FirstName: reqBody.FirstName,
@@ -156,11 +150,12 @@ func (h *CustomersDefault) GetTotalByCondition() http.HandlerFunc {
 		total, err := h.sv.GetTotalByCondition()
 
 		if err != nil {
-			response.Error(w, http.StatusInternalServerError, "error saving customer")
+			fmt.Println(err)
+			response.Error(w, http.StatusInternalServerError, err.Error())
 			return
 		}
 
-		response.JSON(w, http.StatusCreated, map[string]any{
+		response.JSON(w, http.StatusOK, map[string]any{
 			"message": "Total  by condition",
 			"data":    total,
 		})
@@ -173,11 +168,11 @@ func (h *CustomersDefault) GetMostActive() http.HandlerFunc {
 		ma, err := h.sv.GetMostActive()
 
 		if err != nil {
-			response.Error(w, http.StatusInternalServerError, "error saving customer")
+			response.Error(w, http.StatusInternalServerError, err.Error())
 			return
 		}
 
-		response.JSON(w, http.StatusCreated, map[string]any{
+		response.JSON(w, http.StatusOK, map[string]any{
 			"message": "Most active customer spent more money",
 			"data":    ma,
 		})
